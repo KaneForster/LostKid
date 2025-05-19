@@ -78,7 +78,7 @@ public class PLayerMovement : MonoBehaviour
 
         //Send to Animator
         float inputMagnitude = new Vector2(horizontalInput, verticalInput).magnitude;
-        animator.SetFloat("Speed", inputMagnitude, 60f, Time.deltaTime); 
+        animator.SetFloat("Speed", inputMagnitude, 2f, Time.deltaTime); 
 
         //Apply Run
 
