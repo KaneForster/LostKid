@@ -48,6 +48,10 @@ public class EnemyFollowPlayer : MonoBehaviour
             ActivateEnemy();
         }
     }
+    public bool IsAwake()
+    {
+        return isActive;
+    }
 }
 
 
