@@ -14,11 +14,23 @@ public class FearSystem : MonoBehaviour
     private float fearValue = 0f;
     private float maxFear = 100f;
 
+    private Animator playerAnimator;
+    private PlayerMovement movementScript;
+    private bool IsPanicking = false;
+
     void Start()
     {
-        enemies = new List<EnemyFollowPlayer>(
-            FindObjectsOfType<EnemyFollowPlayer>()
-        );
+        enemies = new List<EnemyFollowPlayer>(FindObjectsOfType<EnemyFollowPlayer>());
+
+        playerAnimator = player.GetComponent<Animator>();
+
+            if (playerAnimator == null)
+                Debug.LogError("FearSystem: Animator not found on player!");
+
+        movementScript = player.GetComponent<PlayerMovement>();
+        if (movementScript == null)
+                Debug.LogError("PlayerMovement script not found on player!");
+
     }
 
     void Update()
@@ -47,5 +59,16 @@ public class FearSystem : MonoBehaviour
         // Clamp and assign to slider
         fearValue = Mathf.Clamp(fearValue, 0f, maxFear);
         fearSlider.value = fearValue / maxFear;
+
+        // Trigger panic animation
+        if (fearValue >= maxFear && !IsPanicking)
+        {
+            IsPanicking = true;
+            playerAnimator.SetBool("IsPanicking", true);
+
+            if (movementScript != null)
+                movementScript.canMove = false;
+        }
+        //Debug.Log("Fear: " + fearValue);
     }
 }

@@ -41,6 +41,7 @@ public class EnemyFollowPlayer : MonoBehaviour
         // Optional: play sound or animation
     }
 
+    
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -52,6 +53,15 @@ public class EnemyFollowPlayer : MonoBehaviour
     {
         return isActive;
     }
+
+    // visualize activation distance circle 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f); // Red with transparency
+        Gizmos.DrawWireSphere(transform.position, activationDistance);
+    }
+
+
 }
 
 

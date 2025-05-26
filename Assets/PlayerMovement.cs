@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-public class PLayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
     public Transform cam;
     private Animator animator;
-
+    
+    public bool canMove = true;
+    
     public float speed = 6f;
     public float runSpeed = 2f;
     public float jumpHeight = 2f;
@@ -49,59 +51,59 @@ public class PLayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
         
+        if (!canMove) return;
+            // Movement Input
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float verticalInput = Input.GetAxisRaw("Vertical");
 
-        // Movement Input
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+            // Sprint only when moving forward
+            float currentSpeed = speed;
+            bool isMovingForward = verticalInput > 0.1f;
 
-        // Sprint only when moving forward
-        float currentSpeed = speed;
-        bool isMovingForward = verticalInput > 0.1f;
+            running = false; // Reset each frame
 
-        running = false; // Reset each frame
+            Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
+            if (movementDirection.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        if (movementDirection.magnitude >= 0.1f)
-        {
-            float targetAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
-            controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
-        }
+                controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
+            }
         
-        //Debug.Log("Grounded: " + isGrounded + " | Space: " + Input.GetKeyDown(KeyCode.Space));
-        Debug.DrawRay(groundCheck.position, Vector3.down * groundDistance, Color.red);
-        //Debug.Log($"Y-Velocity: {velocity.y}, IsGrounded: {isGrounded}");
+            //Debug.Log("Grounded: " + isGrounded + " | Space: " + Input.GetKeyDown(KeyCode.Space));
+            Debug.DrawRay(groundCheck.position, Vector3.down * groundDistance, Color.red);
+            //Debug.Log($"Y-Velocity: {velocity.y}, IsGrounded: {isGrounded}");
 
-        //Send to Animator
-        float inputMagnitude = new Vector2(horizontalInput, verticalInput).magnitude;
-        animator.SetFloat("Speed", inputMagnitude, 2f, Time.deltaTime); 
+            //Send to Animator
+            float inputMagnitude = new Vector2(horizontalInput, verticalInput).magnitude;
+            animator.SetFloat("Speed", inputMagnitude, 2f, Time.deltaTime); 
 
-        //Apply Run
+            //Apply Run
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            currentSpeed *= runSpeed; //multiply based on run multiplier
-        }
-        // Apply jump
-        if (Input.GetButton("Jump") && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                currentSpeed *= runSpeed; //multiply based on run multiplier
+            }
+            // Apply jump
+            //if (Input.GetButton("Jump") && isGrounded)
+            //{
+            //    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            //}
 
-        // Compound gravity
-        velocity.y += gravity * (isGrounded ? 1f : fallMultiplier) * Time.deltaTime;
+            // Compound gravity
+            velocity.y += gravity * (isGrounded ? 1f : fallMultiplier) * Time.deltaTime;
 
-        // Move character
-        controller.Move(velocity * currentSpeed * Time.deltaTime);
+            // Move character
+            controller.Move(velocity * currentSpeed * Time.deltaTime);
 
-        float movementSpeed = new Vector3(horizontalInput, 0f, verticalInput).magnitude;
-        animator.SetFloat("Speed", movementSpeed);
-        animator.SetBool("IsRunning", running);
-        animator.SetBool("IsGrounded", isGrounded);
+            float movementSpeed = new Vector3(horizontalInput, 0f, verticalInput).magnitude;
+            animator.SetFloat("Speed", movementSpeed);
+            animator.SetBool("IsRunning", running);
+            animator.SetBool("IsGrounded", isGrounded);
 
 
     }
