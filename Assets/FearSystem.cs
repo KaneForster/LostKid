@@ -27,7 +27,7 @@ public class FearSystem : MonoBehaviour
 	private float maxFear = 100f;
 
 	public FirstPersonController playerController;
-	private Animator playerAnimator;
+	//private Animator playerAnimator;
 	private PlayerMovement movementScript;
 	private bool IsPanicking = false;
 	private GameState CurrentGameState = GameState.Playing;
@@ -38,15 +38,15 @@ public class FearSystem : MonoBehaviour
 		
 		// janky player getter
 		playerController = FindAnyObjectByType<FirstPersonController>();
-		playerAnimator = player.GetComponent<Animator>();
+		//playerAnimator = player.GetComponent<Animator>();
 		UIAnimator = GetComponent<Animator>();
 
-		if (playerAnimator == null)
-			Debug.LogError("FearSystem: Animator not found on player!");
+		//if (playerAnimator == null)
+			//Debug.LogError("FearSystem: Animator not found on player!");
 
-		movementScript = player.GetComponent<PlayerMovement>();
-		if (movementScript == null)
-			Debug.LogError("PlayerMovement script not found on player!");
+		//movementScript = player.GetComponent<PlayerMovement>();
+		//if (movementScript == null)
+			//Debug.LogError("PlayerMovement script not found on player!");
 
 		CurrentGameState = GameState.Playing;
 	}
@@ -107,7 +107,7 @@ public class FearSystem : MonoBehaviour
 					// Do nothing because we only care about restarting
 					break;
 				case GameState.GameOver:
-					SceneManager.LoadScene("Scenes/Main");
+					SceneManager.LoadScene("Scenes/SecondPerson");
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
