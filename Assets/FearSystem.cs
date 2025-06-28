@@ -35,40 +35,40 @@ public class FearSystem : MonoBehaviour
 
     void Update()
     {
-        float totalFear = 0f;
-
-        foreach (var enemy in enemies)
-        {
-            if (enemy.IsAwake()) // We'll add this method shortly
-            {
-                float distance = Vector3.Distance(player.position, enemy.transform.position);
-                if (distance < fearRadius)
-                {
-                    float fearContribution = (1 - (distance / fearRadius)) * fearIncreaseRate;
-                    totalFear += fearContribution;
-                }
-            }
-        }
-
-        // Increase or decrease fear value
-        if (totalFear > 0)
-            fearValue += totalFear * Time.deltaTime;
-        else
-            fearValue -= fearDecreaseRate * Time.deltaTime;
-
-        // Clamp and assign to slider
-        fearValue = Mathf.Clamp(fearValue, 0f, maxFear);
-        fearSlider.value = fearValue / maxFear;
-
-        // Trigger panic animation
-        if (fearValue >= maxFear && !IsPanicking)
-        {
-            IsPanicking = true;
-            playerAnimator.SetBool("IsPanicking", true);
-
-            if (movementScript != null)
-                movementScript.canMove = false;
-        }
-        //Debug.Log("Fear: " + fearValue);
+        // float totalFear = 0f;
+        //
+        // foreach (var enemy in enemies)
+        // {
+        //     if (enemy.IsAwake()) // We'll add this method shortly
+        //     {
+        //         float distance = Vector3.Distance(player.position, enemy.transform.position);
+        //         if (distance < fearRadius)
+        //         {
+        //             float fearContribution = (1 - (distance / fearRadius)) * fearIncreaseRate;
+        //             totalFear += fearContribution;
+        //         }
+        //     }
+        // }
+        //
+        // // Increase or decrease fear value
+        // if (totalFear > 0)
+        //     fearValue += totalFear * Time.deltaTime;
+        // else
+        //     fearValue -= fearDecreaseRate * Time.deltaTime;
+        //
+        // // Clamp and assign to slider
+        // fearValue = Mathf.Clamp(fearValue, 0f, maxFear);
+        // fearSlider.value = fearValue / maxFear;
+        //
+        // // Trigger panic animation
+        // if (fearValue >= maxFear && !IsPanicking)
+        // {
+        //     IsPanicking = true;
+        //     playerAnimator.SetBool("IsPanicking", true);
+        //
+        //     if (movementScript != null)
+        //         movementScript.canMove = false;
+        // }
+        // //Debug.Log("Fear: " + fearValue);
     }
 }

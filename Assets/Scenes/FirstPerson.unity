@@ -7439,7 +7439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fearSlider: {fileID: 1150002784}
-  player: {fileID: 0}
+  player: {fileID: 2048691045}
   fearRadius: 10
   fearIncreaseRate: 10
   fearDecreaseRate: 5
@@ -11382,7 +11382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &770478496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28936,6 +28936,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a3bea1dd0263bf43861bde07f3af72f, type: 3}
+--- !u!4 &2048691045 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8774754425683843207, guid: c47d797a9ea86264fbd9f95bb496f3fc, type: 3}
+  m_PrefabInstance: {fileID: 1458826805473888885}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2048768772 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5905604319651664915, guid: ead76e3a9a32299448dfa6d8122b482e, type: 3}
@@ -30289,11 +30294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8774754425683843207, guid: c47d797a9ea86264fbd9f95bb496f3fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 2.78
       objectReference: {fileID: 0}
     - target: {fileID: 8774754425683843207, guid: c47d797a9ea86264fbd9f95bb496f3fc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.82
+      value: -27.5
       objectReference: {fileID: 0}
     - target: {fileID: 8774754425683843207, guid: c47d797a9ea86264fbd9f95bb496f3fc, type: 3}
       propertyPath: m_LocalRotation.w
