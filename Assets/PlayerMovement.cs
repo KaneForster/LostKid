@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public bool canMove = true;
     
     public float speed = 6f;
+    public float acceleration = 0.1f;
     public float runSpeed = 2f;
     public float jumpHeight = 2f;
     public float gravity = -9.81f;
@@ -58,7 +59,11 @@ public class PlayerMovement : MonoBehaviour
 
             // Sprint only when moving forward
             float currentSpeed = speed;
-            bool isMovingForward = verticalInput > 0.1f;
+            bool isMovingForward = !Mathf.Approximately(verticalInput,0f);
+            if (isMovingForward)
+            {
+                currentSpeed = Mathf.Lerp(currentSpeed, speed, acceleration * Time.deltaTime);
+            }
 
             running = false; // Reset each frame
 
@@ -95,10 +100,10 @@ public class PlayerMovement : MonoBehaviour
             //}
 
             // Compound gravity
-            velocity.y += gravity * (isGrounded ? 1f : fallMultiplier) * Time.deltaTime;
+            //velocity.y += gravity * (isGrounded ? 1f : fallMultiplier) * Time.deltaTime;
 
             // Move character
-            controller.Move(velocity * currentSpeed * Time.deltaTime);
+            controller.Move(velocity * (currentSpeed * Time.deltaTime));
 
             float movementSpeed = new Vector3(horizontalInput, 0f, verticalInput).magnitude;
             animator.SetFloat("Speed", movementSpeed);
