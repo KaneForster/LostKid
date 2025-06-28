@@ -2,7 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.SceneManagement;
 
+public enum GameState
+{
+	Playing,
+	GameOver
+}
 
 public class FearSystem : MonoBehaviour
 {
@@ -12,21 +19,25 @@ public class FearSystem : MonoBehaviour
 	public float fearIncreaseRate = 10f; // How quickly fear rises
 	public float fearDecreaseRate = 5f; // How quickly fear falls when safe
 
+
 	public Animator UIAnimator;
 
 	private List<EnemyFollowPlayer> enemies;
 	private float fearValue = 0f;
 	private float maxFear = 100f;
 
+	public FirstPersonController playerController;
 	private Animator playerAnimator;
 	private PlayerMovement movementScript;
 	private bool IsPanicking = false;
-
+	private GameState CurrentGameState = GameState.Playing;
 
 	void Start()
 	{
 		enemies = new List<EnemyFollowPlayer>(FindObjectsOfType<EnemyFollowPlayer>());
-
+		
+		// janky player getter
+		playerController = FindAnyObjectByType<FirstPersonController>();
 		playerAnimator = player.GetComponent<Animator>();
 		UIAnimator = GetComponent<Animator>();
 
@@ -36,6 +47,8 @@ public class FearSystem : MonoBehaviour
 		movementScript = player.GetComponent<PlayerMovement>();
 		if (movementScript == null)
 			Debug.LogError("PlayerMovement script not found on player!");
+
+		CurrentGameState = GameState.Playing;
 	}
 
 	void Update()
@@ -74,15 +87,36 @@ public class FearSystem : MonoBehaviour
 			UIAnimator.SetTrigger("GameOver");
 			if (movementScript != null)
 				movementScript.canMove = false;
+			playerController.playerCanMove = false;
+			CurrentGameState = GameState.GameOver;
 		}
+
+		UpdateInput();
 
 		UpdateFearUI();
 		//Debug.Log("Fear: " + fearValue);
 	}
 
+	private void UpdateInput()
+	{
+		if (Input.GetKeyDown(KeyCode.Return))
+		{
+			switch (CurrentGameState)
+			{
+				case GameState.Playing:
+					// Do nothing because we only care about restarting
+					break;
+				case GameState.GameOver:
+					SceneManager.LoadScene("Scenes/Main");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+	}
+
 	private void UpdateFearUI()
 	{
 		UIAnimator.SetFloat("Fear", fearValue);
-
 	}
 }
